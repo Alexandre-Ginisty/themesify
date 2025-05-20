@@ -1,0 +1,16 @@
+RewriteEngine On
+
+# Si la requête est pour /login, redirige vers HTTPS
+RewriteCond %{HTTPS} off
+RewriteCond %{REQUEST_URI} ^/login
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# Pour toutes les autres requêtes, reste en HTTP
+RewriteCond %{HTTPS} on
+RewriteCond %{REQUEST_URI} !^/login
+RewriteRule ^(.*)$ http://%{HTTP_HOST}/$1 [R=301,L]
+
+# Redirige toutes les requêtes vers index.html pour le routage React
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [QSA,L]

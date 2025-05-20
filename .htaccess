@@ -1,0 +1,8 @@
+RewriteEngine On
+RewriteBase /SpotiThemes/
+RewriteRule ^index\.html$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /SpotiThemes/index.html [L]
+
+DirectoryIndex index.html
