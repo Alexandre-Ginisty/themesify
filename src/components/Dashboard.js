@@ -7,13 +7,10 @@ import {
   Grid,
   Card,
   CardContent,
-  CardMedia,
   Button,
   useTheme,
   LinearProgress,
-  Alert,
-  Snackbar,
-  CircularProgress
+  Alert
 } from '@mui/material';
 import { motion } from 'framer-motion';
 import { LibraryMusic, PlaylistAdd, Mood, Refresh } from '@mui/icons-material';
