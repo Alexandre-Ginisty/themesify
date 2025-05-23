@@ -1,63 +1,102 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
-import { ThemeProvider, createTheme, CssBaseline, GlobalStyles } from '@mui/material';
 
 const theme = createTheme({
   palette: {
     mode: 'dark',
+    primary: {
+      main: '#1DB954',
+    },
     background: {
       default: '#121212',
-      paper: '#1E1E1E'
-    },
-    primary: {
-      main: '#1DB954', // Spotify green
-    },
-    secondary: {
-      main: '#191414', // Spotify black
+      paper: '#181818',
     },
   },
 });
 
 function App() {
-  const [token, setToken] = React.useState(null);
+  const [token, setToken] = useState(null);
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-  React.useEffect(() => {
-    const hash = window.location.hash;
-    if (hash) {
-      const params = new URLSearchParams(hash.substring(1));
-      const token = params.get('access_token');
-      const tokenType = params.get('token_type');
-
-      if (token && tokenType === 'Bearer') {
-        setToken(token);
-        window.location.hash = '';
-      } else {
-        console.error('Invalid token type received');
+  useEffect(() => {
+    // Handle the authentication response
+    const handleAuth = () => {
+      setIsAuthenticating(true);
+      const hash = window.location.hash;
+      if (!hash) {
+        // Check if we have a stored token
+        const storedToken = localStorage.getItem('spotify_token');
+        if (storedToken) {
+          setToken(storedToken);
+        }
+        setIsAuthenticating(false);
+        return;
       }
-    }
+
+      // Parse the hash string (remove the leading #)
+      const params = new URLSearchParams(hash.substring(1));
+      const accessToken = params.get('access_token');
+      const error = params.get('error');
+
+      console.log('Auth Response:', { 
+        hasToken: !!accessToken,
+        error,
+        pathname: window.location.pathname 
+      });
+
+      if (error) {
+        console.error('Authentication error:', error);
+        return;
+      }
+
+      if (accessToken) {
+        // Store the token
+        localStorage.setItem('spotify_token', accessToken);
+        setToken(accessToken);
+        
+        // Clear the hash from the URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+      setIsAuthenticating(false);
+    };
+
+    handleAuth();
   }, []);
+
+  // Debug logging
+  useEffect(() => {
+    console.log('App State:', {
+      hasToken: !!token,
+      currentPath: window.location.pathname,
+      search: window.location.search,
+      isAuthenticating
+    });
+  }, [token, isAuthenticating]);
 
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <GlobalStyles
-          styles={{
-            body: {
-              background: 'linear-gradient(135deg, #1E1E1E 0%, #121212 100%)',
-              minHeight: '100vh',
-            }
-          }}
-        />
         <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route 
-            path="/dashboard" 
-            element={token ? <Dashboard token={token} /> : <Navigate to="/login" />} 
+          <Route
+            path="/"
+            element={
+              token ? <Navigate to="/dashboard" replace /> : <Login />
+            }
           />
-          <Route path="/" element={<Navigate to={token ? '/dashboard' : '/login'} />} />
+          <Route
+            path="/dashboard"
+            element={
+              token ? <Dashboard token={token} /> : <Navigate to="/" replace />
+            }
+          />
+          <Route
+            path="*"
+            element={<Navigate to="/" replace />}
+          />
         </Routes>
       </ThemeProvider>
     </BrowserRouter>

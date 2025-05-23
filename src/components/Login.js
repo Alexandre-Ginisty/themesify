@@ -2,7 +2,26 @@ import React from 'react';
 import { Box, Button, Typography, Container, useTheme } from '@mui/material';
 import { motion } from 'framer-motion';
 
-const LOGIN_URI = `https://accounts.spotify.com/authorize?client_id=f1c38d61e89f480081a9498d5ed34d6c&response_type=token&token_type=Bearer&redirect_uri=${encodeURIComponent('https://themesify-app.windsurf.build/dashboard')}&scope=${encodeURIComponent('user-library-read playlist-modify-public playlist-modify-private')}`;
+const CLIENT_ID = process.env.REACT_APP_SPOTIFY_CLIENT_ID || 'f1c38d61e89f480081a9498d5ed34d6c';
+const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI || 'https://themesify-app.windsurf.build';
+
+// Debug logs for development
+if (process.env.NODE_ENV === 'development') {
+  console.log('Auth Config:', {
+    clientId: CLIENT_ID,
+    redirectUri: REDIRECT_URI,
+    env: process.env
+  });
+}
+
+// Define the authorization URL with required parameters
+const LOGIN_URI = 'https://accounts.spotify.com/authorize?' + new URLSearchParams({
+  client_id: CLIENT_ID,
+  redirect_uri: REDIRECT_URI,
+  scope: 'user-library-read playlist-modify-public playlist-modify-private',
+  response_type: 'token',
+  show_dialog: true
+}).toString();
 
 function Login() {
   const theme = useTheme();

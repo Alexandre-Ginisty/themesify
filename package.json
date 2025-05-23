@@ -12,12 +12,13 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.18.0",
+    "react-scripts": "^5.0.1",
     "spotify-web-api-js": "^1.5.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "CI=false GENERATE_SOURCEMAP=false react-scripts build",
+    "build": "npm install && CI=false GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -40,8 +41,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "cross-env": "^7.0.3",
-    "react-scripts": "^5.0.1"
+    "cross-env": "^7.0.3"
   },
   "engines": {
     "node": ">=16.0.0"
