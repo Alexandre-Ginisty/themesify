@@ -1,6 +1,7 @@
 {
   "name": "themesify",
   "version": "1.0.0",
+  "homepage": "https://themesify-app.windsurf.build",
   "description": "A Spotify mood-based playlist generator",
   "private": true,
   "dependencies": {
