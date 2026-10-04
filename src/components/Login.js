@@ -3,14 +3,15 @@ import { Box, Button, Typography, Container, useTheme } from '@mui/material';
 import { motion } from 'framer-motion';
 
 const CLIENT_ID = process.env.REACT_APP_SPOTIFY_CLIENT_ID || 'f1c38d61e89f480081a9498d5ed34d6c';
-const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI || 'https://themesify-app.windsurf.build';
+// En dev, on revient sur l'origine locale ; en prod, sur le site déployé.
+const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI ||
+  (process.env.NODE_ENV === 'production' ? 'https://themesify-app.windsurf.build' : window.location.origin);
 
 // Debug logs for development
 if (process.env.NODE_ENV === 'development') {
   console.log('Auth Config:', {
     clientId: CLIENT_ID,
-    redirectUri: REDIRECT_URI,
-    env: process.env
+    redirectUri: REDIRECT_URI
   });
 }
 

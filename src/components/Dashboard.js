@@ -7,6 +7,7 @@ import {
   Grid,
   Card,
   CardContent,
+  CardMedia,
   Button,
   useTheme,
   LinearProgress,

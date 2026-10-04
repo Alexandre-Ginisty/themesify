@@ -8,7 +8,7 @@ A web application that analyzes your Spotify liked songs and generates mood-base
 2. A Spotify Developer account and registered application
    - Go to https://developer.spotify.com/dashboard
    - Create a new application
-   - Add http://localhost:8080/SpotiThemes as a redirect URI
+   - Add http://localhost:3000 as a redirect URI
 
 ## Setup
 
